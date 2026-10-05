@@ -1,0 +1,317 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>วันนี้กินอะไรดี</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chonburi&family=IBM+Plex+Sans+Thai:wght@400;500;600&display=swap">
+<style>
+/* Layout: two columns on desktop — questions (left) feed a sticky "order ticket" of picks (right); stacked on phone */
+:root{
+  --bg:#EDF2EE; --surface:#FFFFFF; --ink:#1B2620; --muted:#5E6E65; --line:#D3DDD6;
+  --chili:#C8361B; --chili-soft:#FBE7E2; --basil:#2F6B4A; --basil-soft:#DFEDE4; --turmeric:#E3A21A;
+  --display:"Chonburi","IBM Plex Sans Thai",Georgia,serif;
+  --body:"IBM Plex Sans Thai","Noto Sans Thai",Tahoma,system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#111814; --surface:#1A231E; --ink:#E4ECE7; --muted:#9AAAA1; --line:#2E3A33;
+  --chili:#FF6E50; --chili-soft:#3A1F19; --basil:#7CC79C; --basil-soft:#1E3328; --turmeric:#F2B940; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#111814; --surface:#1A231E; --ink:#E4ECE7; --muted:#9AAAA1; --line:#2E3A33;
+  --chili:#FF6E50; --chili-soft:#3A1F19; --basil:#7CC79C; --basil-soft:#1E3328; --turmeric:#F2B940; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.6;padding-inline:16px;padding-block:28px 48px}
+.wrap{max-width:1080px;margin:0 auto;display:grid;gap:28px}
+header h1{font-family:var(--display);font-weight:400;font-size:clamp(2rem,5vw,3rem);line-height:1.25;margin:0;text-wrap:balance}
+header h1 span{color:var(--chili)}
+header p{margin:6px 0 0;color:var(--muted);max-width:60ch}
+
+.grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:28px;align-items:start}
+@media (max-width:820px){.grid{grid-template-columns:1fr}}
+
+.qs{display:grid;gap:26px;min-width:0}
+.q{display:grid;gap:12px}
+.q-head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.q-num{font-family:var(--display);color:var(--chili);font-size:1.4rem;line-height:1}
+.q h2{margin:0;font-size:1.15rem;font-weight:600}
+.q-hint{color:var(--muted);font-size:.85rem}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:inherit;font-size:.95rem;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);
+  padding:6px 14px;border-radius:999px;cursor:pointer;transition:background .15s,border-color .15s,color .15s}
+.chip:hover{border-color:var(--muted)}
+.chip:focus-visible,.btn:focus-visible,input:focus-visible{outline:2px solid var(--turmeric);outline-offset:2px}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.q.often .chip[aria-pressed="true"]{background:var(--basil);border-color:var(--basil);color:var(--surface)}
+.q.just .chip[aria-pressed="true"]{background:var(--chili);border-color:var(--chili);color:var(--surface)}
+.field{display:grid;gap:4px;max-width:420px}
+.field label{font-size:.85rem;color:var(--muted)}
+.field input{font:inherit;padding:8px 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink)}
+.divider{border:0;border-top:1px dashed var(--line);margin:0}
+
+/* ticket */
+.ticket{position:sticky;top:calc(env(safe-area-inset-top,0px) + 16px);background:var(--surface);border:1px solid var(--line);
+  border-radius:14px;padding:22px 20px 18px;display:grid;gap:16px;min-width:0;
+  box-shadow:0 1px 0 var(--line),0 12px 28px -18px rgba(20,40,30,.35)}
+@media (max-width:820px){.ticket{position:static}}
+.ticket-top{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.eyebrow{font-size:.78rem;letter-spacing:.08em;color:var(--muted);font-weight:500}
+.top-pick{position:relative;background:var(--chili-soft);border-radius:10px;padding:18px 18px 16px;display:grid;gap:8px}
+.stamp{position:absolute;top:-12px;right:14px;transform:rotate(4deg);background:var(--chili);color:var(--surface);
+  font-family:var(--display);font-size:.85rem;padding:3px 12px;border-radius:6px}
+.top-pick .name{font-family:var(--display);font-size:clamp(1.6rem,4vw,2.1rem);line-height:1.3;margin:0;text-wrap:balance}
+.top-pick .desc{margin:0;color:var(--ink)}
+.why{margin:0;font-size:.9rem;color:var(--muted)}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{font-size:.78rem;padding:1px 9px;border-radius:999px;background:var(--surface);color:var(--muted);border:1px solid var(--line)}
+.tag.hit{background:var(--basil-soft);color:var(--basil);border-color:transparent;font-weight:500}
+.alts{list-style:none;margin:0;padding:0;display:grid}
+.alt{display:grid;grid-template-columns:1.6rem minmax(0,1fr) auto;gap:10px;align-items:start;padding:11px 0;border-top:1px dashed var(--line)}
+.alt .n{font-variant-numeric:tabular-nums;color:var(--muted);font-weight:600}
+.alt .t{font-weight:600}
+.alt .s{font-size:.85rem;color:var(--muted)}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.btn{font:inherit;font-size:.9rem;border-radius:10px;padding:8px 14px;cursor:pointer;border:1.5px solid var(--line);background:var(--surface);color:var(--ink)}
+.btn.primary{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.btn.small{font-size:.8rem;padding:3px 10px;border-radius:8px;color:var(--muted)}
+.btn:hover{border-color:var(--muted)}
+.foot{font-size:.8rem;color:var(--muted);margin:0}
+.empty{color:var(--muted);margin:0}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>วันนี้กิน<span>อะไรดี</span></h1>
+    <p>ตอบ 3 ข้อ แล้วดูเมนูที่แนะนำทางขวา ระบบจะเลือกจากสิ่งที่อยากกิน และเลี่ยงของที่กินบ่อยหรือเพิ่งกินไป</p>
+  </header>
+
+  <div class="grid">
+    <section class="qs" aria-label="คำถาม">
+      <div class="q crave">
+        <div class="q-head"><span class="q-num">๑</span><h2>อยากกินอะไร</h2><span class="q-hint">เลือกได้หลายอย่าง</span></div>
+        <div class="chips" id="crave"></div>
+      </div>
+      <hr class="divider">
+      <div class="q often">
+        <div class="q-head"><span class="q-num">๒</span><h2>ช่วงนี้กินอะไรบ่อย</h2><span class="q-hint">จะถูกลดลำดับลง</span></div>
+        <div class="chips" id="often"></div>
+      </div>
+      <hr class="divider">
+      <div class="q just">
+        <div class="q-head"><span class="q-num">๓</span><h2>เพิ่งกินอะไรมา</h2><span class="q-hint">เลือกประเภท หรือพิมพ์ชื่อเมนู</span></div>
+        <div class="chips" id="just"></div>
+        <div class="field">
+          <label for="justText">ชื่อเมนูที่เพิ่งกิน (ไม่บังคับ)</label>
+          <input id="justText" list="dishList" placeholder="เช่น กะเพรา, ข้าวมันไก่" autocomplete="off">
+          <datalist id="dishList"></datalist>
+        </div>
+      </div>
+    </section>
+
+    <aside class="ticket" aria-live="polite">
+      <div class="ticket-top">
+        <span class="eyebrow">เมนูแนะนำสำหรับมื้อนี้</span>
+        <div class="row">
+          <button class="btn" id="reset" type="button">ล้างคำตอบ</button>
+          <button class="btn primary" id="reroll" type="button">สุ่มใหม่</button>
+        </div>
+      </div>
+      <div id="result"></div>
+      <p class="foot" id="foot"></p>
+    </aside>
+  </div>
+</div>
+
+<script>
+const CRAVES = [
+  ["spicy","เผ็ดจัด"],["sour","เปรี้ยวจี๊ด"],["soup","ซดน้ำร้อนๆ"],["noodle","อยากได้เส้น"],
+  ["rice","ข้าวจานเดียว"],["crispy","ทอดกรอบๆ"],["light","เบาๆ ไม่หนักท้อง"],["rich","เข้มข้น จัดเต็ม"],
+  ["grill","ปิ้งย่าง"],["foreign","อาหารต่างชาติ"]
+];
+const TAG = Object.fromEntries(CRAVES);
+const GROUPS = [
+  ["stirfry","ผัดราดข้าว"],["noodle","ก๋วยเตี๋ยว"],["isan","ส้มตำ / อีสาน"],["curry","แกง / ต้ม"],
+  ["onerice","ข้าวมันไก่ / ข้าวหน้า"],["fried","ของทอด"],["hotpot","ชาบู / หมูกระทะ"],
+  ["japan","ญี่ปุ่น"],["korea","เกาหลี"],["western","ฝรั่ง / ฟาสต์ฟู้ด"],["clean","คลีน / สลัด"]
+];
+const GNAME = Object.fromEntries(GROUPS);
+
+// [name, group, tags, description]
+const DISHES = [
+  ["กะเพราหมูสับไข่ดาว","stirfry",["spicy","rice"],"เมนูกู้ชีพ ใส่พริกเยอะๆ ไข่ดาวขอบกรอบ"],
+  ["ผัดพริกแกงหมูกรอบ","stirfry",["spicy","rice","crispy"],"หมูกรอบคลุกพริกแกง ใบมะกรูดหอม"],
+  ["ข้าวผัดปู","stirfry",["rice","light"],"ข้าวผัดไฟแรง เนื้อปูเต็มคำ บีบมะนาว"],
+  ["ข้าวกระเทียมหมูทอด","stirfry",["rice","crispy"],"หมูทอดกระเทียมเจียว ราดข้าวสวยร้อนๆ"],
+  ["ผัดเปรี้ยวหวานทะเล","stirfry",["sour","rice"],"สับปะรด มะเขือเทศ แตงกวา รสเปรี้ยวหวาน"],
+  ["ไก่ผัดเม็ดมะม่วง","stirfry",["rice","rich"],"ไก่ชุบแป้งทอด ผัดพริกแห้งและเม็ดมะม่วง"],
+  ["ผัดฉ่าทะเล","stirfry",["spicy","rice"],"กระชาย พริกไทยอ่อน เผ็ดร้อนกลิ่นหอม"],
+  ["ผัดผักบุ้งไฟแดง + หมูกรอบ","stirfry",["rice","light","crispy"],"ผักกรอบ ไฟแรง ราดข้าวกินง่าย"],
+
+  ["ก๋วยเตี๋ยวเรือ","noodle",["noodle","soup","rich","spicy"],"น้ำตกเข้มข้น ถ้วยเล็ก สั่งได้หลายชาม"],
+  ["เย็นตาโฟ","noodle",["noodle","soup","sour"],"น้ำแดงเปรี้ยวหวาน ลูกชิ้นปลา เต้าหู้ทอด"],
+  ["บะหมี่เกี๊ยวหมูแดง","noodle",["noodle","soup","light"],"น้ำซุปใส เกี๊ยวกุ้ง หมูแดงฉ่ำ"],
+  ["ผัดไทยกุ้งสด","noodle",["noodle"],"เส้นจันท์ ซอสมะขาม ถั่วงอก กุยช่าย"],
+  ["ราดหน้าหมูหมัก","noodle",["noodle","rich"],"เส้นใหญ่หอมกระทะ น้ำราดข้น คะน้ากรอบ"],
+  ["ผัดซีอิ๊วหมู","noodle",["noodle"],"เส้นใหญ่ไหม้นิดๆ ไข่ คะน้า"],
+  ["ข้าวซอยไก่","noodle",["noodle","soup","rich"],"แกงกะทิแบบเหนือ เส้นกรอบด้านบน"],
+  ["ก๋วยจั๊บน้ำข้น","noodle",["noodle","soup","rich"],"พริกไทยหอม ไส้ หมูกรอบ ซดคล่องคอ"],
+  ["ขนมจีนน้ำยาป่า","noodle",["noodle","spicy"],"น้ำยาเผ็ดร้อน ผักเคียงเยอะ"],
+
+  ["ส้มตำปูปลาร้า","isan",["spicy","sour"],"แซ่บนัว กินกับข้าวเหนียวและหมูยอ"],
+  ["ตำไทยไข่เค็ม","isan",["sour","light"],"ไม่ปลาร้า เปรี้ยวหวาน ไข่เค็มมัน"],
+  ["ลาบหมู + ข้าวเหนียว","isan",["spicy","sour","rice"],"ข้าวคั่วหอม ผักแนมสด"],
+  ["ต้มแซ่บกระดูกอ่อน","isan",["spicy","sour","soup"],"น้ำใส เปรี้ยวเผ็ด ใบมะกรูดข่าตะไคร้"],
+  ["ไก่ย่างส้มตำข้าวเหนียว","isan",["grill","spicy"],"ชุดคลาสสิก หนังไก่หอมเตาถ่าน"],
+  ["คอหมูย่างจิ้มแจ่ว","isan",["grill","spicy"],"มันฉ่ำ ไหม้ขอบ จิ้มแจ่วมะขาม"],
+  ["ยำวุ้นเส้นทะเล","isan",["sour","spicy","light","noodle"],"เปรี้ยวจี๊ด สดชื่น ไม่หนักท้อง"],
+
+  ["ต้มยำกุ้งน้ำข้น","curry",["soup","spicy","sour","rich"],"กุ้งแม่น้ำ มันกุ้ง น้ำพริกเผา"],
+  ["แกงเขียวหวานไก่","curry",["rich","spicy","rice"],"กะทิหอม มะเขือเปราะ กินกับขนมจีนก็ได้"],
+  ["ต้มข่าไก่","curry",["soup","rich","sour"],"กะทิข่าหอม เปรี้ยวมะนาวนิดๆ"],
+  ["แกงส้มชะอมกุ้ง","curry",["soup","sour","spicy"],"เปรี้ยวเผ็ด ไข่ชะอมทอดฟู"],
+  ["มัสมั่นเนื้อ","curry",["rich","rice"],"เนื้อตุ๋นนุ่ม มันฝรั่ง ถั่วลิสง"],
+  ["ต้มจืดเต้าหู้หมูสับ","curry",["soup","light"],"น้ำซุปใส กินกับข้าวสวยสบายท้อง"],
+  ["พะแนงหมู","curry",["rich","rice"],"แกงข้น ใบมะกรูดซอย"],
+
+  ["ข้าวมันไก่","onerice",["rice","light"],"ไก่ต้มหนังนุ่ม น้ำจิ้มเต้าเจี้ยว"],
+  ["ข้าวขาหมู","onerice",["rice","rich"],"หมูพะโล้นุ่ม ผักกาดดอง ไข่ต้ม"],
+  ["ข้าวหมูแดงหมูกรอบ","onerice",["rice","crispy"],"น้ำราดหวาน หมูกรอบหนังพอง"],
+  ["ข้าวหน้าเป็ด","onerice",["rice","rich"],"เป็ดย่างน้ำราดพะโล้"],
+  ["โจ๊กหมูใส่ไข่","onerice",["soup","light","rice"],"ร้อนๆ ขิงซอย ปาท่องโก๋"],
+  ["ข้าวต้มปลา","onerice",["soup","light","rice"],"น้ำซุปใส ปลาสด ตั้งฉ่าย"],
+
+  ["ไก่ทอดหาดใหญ่","fried",["crispy"],"หอมเครื่องเทศ หอมเจียวกรอบ"],
+  ["ทอดมันปลากราย","fried",["crispy","spicy"],"เด้ง หอมพริกแกง น้ำจิ้มอาจาด"],
+  ["ปีกไก่ทอดน้ำปลา","fried",["crispy"],"กรอบ เค็มหวาน กินกับข้าวเหนียว"],
+  ["หอยทอดกรอบ","fried",["crispy","rich"],"แป้งกรอบ ถั่วงอก ซอสพริก"],
+
+  ["หมูกระทะ","hotpot",["grill","rich","soup"],"ย่างด้านบน ต้มด้านล่าง ไปกับเพื่อน"],
+  ["ชาบู","hotpot",["soup","light"],"ผักเยอะ เนื้อบาง เลือกน้ำซุปได้"],
+  ["สุกี้น้ำทะเล","hotpot",["soup","light","noodle"],"วุ้นเส้น ผักกาดขาว น้ำจิ้มสุกี้"],
+  ["จิ้มจุ่ม","hotpot",["soup","spicy"],"หม้อดิน น้ำซุปสมุนไพร น้ำจิ้มแจ่ว"],
+
+  ["ราเมงทงคตสึ","japan",["noodle","soup","rich","foreign"],"น้ำซุปกระดูกหมูข้น ไข่ยางมะตูม"],
+  ["ข้าวหน้าแซลมอน","japan",["rice","light","foreign"],"แซลมอนสด ข้าวญี่ปุ่น วาซาบิ"],
+  ["ข้าวแกงกะหรี่ทงคัตสึ","japan",["crispy","rice","rich","foreign"],"หมูชุบเกล็ดขนมปัง แกงกะหรี่หวานนิดๆ"],
+  ["อุด้งร้อน","japan",["noodle","soup","light","foreign"],"เส้นหนึบ น้ำซุปดาชิ"],
+  ["กิวด้ง","japan",["rice","rich","foreign"],"เนื้อสไลซ์ผัดซอส หอมใหญ่ ไข่ออนเซ็น"],
+
+  ["ไก่ทอดเกาหลี","korea",["crispy","spicy","foreign"],"ซอสโคชูจัง เหนียวหนึบ"],
+  ["บิบิมบับ","korea",["rice","light","foreign"],"ผักหลายอย่าง คลุกโคชูจัง"],
+  ["ต๊อกบกกี","korea",["spicy","foreign"],"ต๊อกหนึบ ซอสเผ็ดหวาน"],
+  ["ปิ้งย่างเกาหลี","korea",["grill","rich","foreign"],"หมูสามชั้น ห่อผักกาด กิมจิ"],
+  ["บูเดจีเก","korea",["soup","spicy","noodle","foreign"],"หม้อไฟ มาม่า ไส้กรอก ชีส"],
+
+  ["พิซซ่า","western",["rich","foreign"],"ชีสยืด แบ่งกันกินได้"],
+  ["เบอร์เกอร์เนื้อ","western",["rich","foreign"],"เนื้อฉ่ำ เฟรนช์ฟรายส์ข้างๆ"],
+  ["สปาเกตตีขี้เมา","western",["spicy","noodle","foreign"],"พริกกระเทียม ใบกะเพรา ฟิวชันไทย"],
+  ["สเต๊กหมูพริกไทยดำ","western",["grill","foreign"],"สลัด มันบด ซอสพริกไทยดำ"],
+  ["คาโบนาร่า","western",["noodle","rich","foreign"],"ไข่แดง ชีส เบคอน"],
+
+  ["สลัดอกไก่ย่าง","clean",["light","grill"],"ผักสด น้ำสลัดงา"],
+  ["ข้าวกล้องอกไก่ย่าง","clean",["light","rice","grill"],"อิ่มแต่ไม่หนัก โปรตีนสูง"],
+  ["โพเคโบวล์","clean",["light","rice","foreign"],"ปลาดิบ อะโวคาโด ข้าวญี่ปุ่น"],
+  ["ยำสลัดผักกุ้งสด","clean",["light","sour","spicy"],"น้ำยำมะนาว ผักกรอบ"]
+].map(([name,group,tags,desc],i)=>({id:i,name,group,tags,desc}));
+
+const SAMPLE = {crave:["spicy","soup"], often:["stirfry"], just:"stirfry", justText:"กะเพรา"};
+let state = load() || structuredClone(SAMPLE);
+let seed = Math.random()*1e9|0;
+let skipped = new Set();
+
+function load(){try{const s=localStorage.getItem("kin-arai-dee");return s?JSON.parse(s):null}catch(e){return null}}
+function save(){try{localStorage.setItem("kin-arai-dee",JSON.stringify(state))}catch(e){}}
+
+function chipRow(el, items, isOn, onTap){
+  el.innerHTML="";
+  items.forEach(([id,label])=>{
+    const b=document.createElement("button");
+    b.type="button";b.className="chip";b.id=el.id+"-"+id;b.textContent=label;
+    b.setAttribute("aria-pressed",isOn(id));
+    b.onclick=()=>{onTap(id);renderAll()};
+    el.appendChild(b);
+  });
+}
+function toggle(arr,id){const i=arr.indexOf(id);i<0?arr.push(id):arr.splice(i,1)}
+
+function renderQuestions(){
+  chipRow(crave, CRAVES, id=>state.crave.includes(id), id=>toggle(state.crave,id));
+  chipRow(often, GROUPS, id=>state.often.includes(id), id=>toggle(state.often,id));
+  chipRow(just, [["none","ยังไม่ได้กินอะไร"],...GROUPS], id=>(state.just||"none")===id,
+    id=>{state.just=(id==="none"||state.just===id)?null:id});
+  justText.value=state.justText||"";
+}
+
+function rand(n){let x=Math.sin(seed+n*9301)*10000;return x-Math.floor(x)}
+
+function matchJustDish(){
+  const t=(state.justText||"").trim();
+  if(!t) return null;
+  return DISHES.find(d=>d.name.includes(t)||t.includes(d.name.split(" ")[0])) || null;
+}
+
+function score(){
+  const jd=matchJustDish();
+  const justGroup=state.just||(jd&&jd.group);
+  return DISHES.filter(d=>!skipped.has(d.id)&&!(jd&&jd.id===d.id)).map(d=>{
+    const hits=d.tags.filter(t=>state.crave.includes(t));
+    let s=hits.length*3;
+    if(state.crave.includes("light")&&d.tags.includes("rich")) s-=1.5;
+    if(state.crave.includes("rich")&&d.tags.includes("light")) s-=1.5;
+    const oft=state.often.includes(d.group);
+    const recent=justGroup===d.group;
+    if(oft) s-=2.5;
+    if(recent) s-=4;
+    if(jd) s-=0.4*d.tags.filter(t=>jd.tags.includes(t)&&t!=="rice"&&t!=="foreign").length;
+    s+=rand(d.id)*2;
+    return {d,s,hits,oft,recent};
+  }).sort((a,b)=>b.s-a.s);
+}
+
+function why(r){
+  const parts=[];
+  if(r.hits.length) parts.push("ตรงกับที่อยาก: "+r.hits.map(t=>TAG[t]).join(", "));
+  else if(state.crave.length) parts.push("ไม่ตรงทุกข้อ แต่ช่วยเปลี่ยนบรรยากาศ");
+  else parts.push("ยังไม่ได้เลือกว่าอยากกินอะไร เลยสุ่มให้จากทุกเมนู");
+  if(!r.oft&&!r.recent&&(state.often.length||state.just||state.justText)) parts.push("และไม่ซ้ำกับที่เพิ่งกิน/กินบ่อย");
+  if(r.oft) parts.push("แม้จะอยู่ในหมวดที่กินบ่อย");
+  return parts.join(" ");
+}
+
+function tags(r){
+  return `<div class="tags"><span class="tag">${GNAME[r.d.group]}</span>${r.d.tags.map(t=>`<span class="tag${r.hits.includes(t)?" hit":""}">${TAG[t]}</span>`).join("")}</div>`;
+}
+
+function renderResult(){
+  const list=score();
+  if(!list.length){result.innerHTML=`<p class="empty">ข้ามจนหมดทุกเมนูแล้ว กด “สุ่มใหม่” เพื่อเริ่มรอบใหม่</p>`;foot.textContent="";return}
+  const [top,...rest]=list;
+  const alts=rest.slice(0,4);
+  result.innerHTML=`
+    <div class="top-pick">
+      <span class="stamp">จานนี้เลย</span>
+      <p class="name">${top.d.name}</p>
+      <p class="desc">${top.d.desc}</p>
+      ${tags(top)}
+      <p class="why">${why(top)}</p>
+      <div class="row"><button class="btn small" type="button" data-skip="${top.d.id}">ไม่เอาจานนี้</button></div>
+    </div>
+    <ol class="alts" aria-label="ตัวเลือกอื่น">
+      ${alts.map((r,i)=>`<li class="alt"><span class="n">${i+2}</span>
+        <div><div class="t">${r.d.name}</div><div class="s">${r.d.desc}</div></div>
+        <button class="btn small" type="button" data-skip="${r.d.id}" aria-label="ข้าม ${r.d.name}">ข้าม</button></li>`).join("")}
+    </ol>`;
+  const jd=matchJustDish();
+  foot.textContent=`คัดจาก ${DISHES.length} เมนู`+(skipped.size?` · ข้ามไปแล้ว ${skipped.size} จาน`:"")+(jd?` · ตัด “${jd.name}” ออกเพราะเพิ่งกินไป`:"");
+  result.querySelectorAll("[data-skip]").forEach(b=>b.onclick=()=>{skipped.add(+b.dataset.skip);renderResult()});
+}
+
+function renderAll(){renderQuestions();renderResult();save()}
+
+dishList.innerHTML=DISHES.map(d=>`<option value="${d.name}">`).join("");
+justText.addEventListener("input",()=>{state.justText=justText.value;renderResult();save()});
+reroll.onclick=()=>{seed=Math.random()*1e9|0;skipped.clear();renderResult()};
+reset.onclick=()=>{state={crave:[],often:[],just:null,justText:""};skipped.clear();renderAll()};
+renderAll();
+</script>
+
+</body></html>
